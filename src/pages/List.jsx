@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function List(){
     
     const rowHeight = 50;
     const containerHeight = 800;
     const buffer = 5;
+    const navigate = useNavigate();
+
     const [data, setData] = useState([]);
     const [scrollTop, setScrollTop] = useState(0);
 
@@ -26,7 +29,7 @@ function List(){
     const handleScroll = (e)=>{
         setScrollTop(e.target.scrollTop);
     }
-
+    
     const startIdx = Math.max(0,Math.floor(scrollTop/rowHeight)-buffer);
     const visibleCount = Math.ceil(containerHeight/rowHeight);
     const endIdx = startIdx+visibleCount+buffer*2;
@@ -35,6 +38,11 @@ function List(){
 
     const offsetY = startIdx*rowHeight;
     const totalHeight = data.length*rowHeight;
+
+    const handleClick = (i) =>{
+        navigate(`/details/${startIdx + i}`)
+    }
+
 
     return (
         <div>
@@ -54,7 +62,7 @@ function List(){
                     <div style={{transform: `translateY(${offsetY}px)`}}>
 
                         {visibleData.map((row, i)=>(
-                            <div key={i} style={{height:rowHeight, display:"flex", borderBottom:"1px solid gray"}}>
+                            <div onClick={()=>handleClick(i)} key={i} style={{height:rowHeight, display:"flex", borderBottom:"1px solid gray"}}>
                                 <div style={{width:"200px"}}>{row[0]}</div>
                                 <div style={{width:"200px"}}>{row[1]}</div>
                                 <div style={{width:"200px"}}>{row[2]}</div>

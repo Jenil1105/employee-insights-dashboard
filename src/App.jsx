@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import Login from './pages/Login'
 import List from './pages/List'
 import ProtectedRoute from './components/ProtectedRoute'
+import Details from './pages/Details'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
           <List /> 
         </ProtectedRoute>
       } />
+      <Route path='/details/:id' element={<Details />} />
     </Routes>
   )
 }
