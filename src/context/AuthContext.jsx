@@ -1,10 +1,9 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
-
     const login = () => {
         setIsAuth(true);
     };
