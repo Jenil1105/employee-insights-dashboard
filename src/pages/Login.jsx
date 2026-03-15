@@ -14,7 +14,6 @@ function Login(){
         e.preventDefault();
         if(userName==="testuser" && password==="Test123"){
             login();
-            localStorage.setItem("auth", "true");
             navigate("/list")
         }else{
             alert("Invalid Credentials!!!");
