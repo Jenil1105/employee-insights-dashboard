@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../context/dataContext";
 
 function List(){
     
@@ -8,23 +9,8 @@ function List(){
     const buffer = 5;
     const navigate = useNavigate();
 
-    const [data, setData] = useState([]);
     const [scrollTop, setScrollTop] = useState(0);
-
-
-    useEffect(()=>{
-        const fetchData = async ()=>{
-            const res = await fetch("https://backend.jotish.in/backend_dev/gettabledata.php",
-                {method: "POST",
-                headers: {"Content-Type":"application/json"},
-                body:JSON.stringify({username:"test", password:"123456"})
-                }
-            )
-            const result = await res.json();
-            setData(result.TABLE_DATA.data);
-        };
-        fetchData();
-    },[]);
+    const { data } = useData()
 
     const handleScroll = (e)=>{
         setScrollTop(e.target.scrollTop);

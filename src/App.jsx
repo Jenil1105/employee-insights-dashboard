@@ -1,21 +1,25 @@
 import './App.css'
+import "leaflet/dist/leaflet.css"
 import { Route, Routes } from 'react-router-dom'
 import Login from './pages/Login'
 import List from './pages/List'
 import ProtectedRoute from './components/ProtectedRoute'
 import Details from './pages/Details'
+import Analytics from './pages/Analytics'
+import { DataProvider } from './context/dataContext'
 
 function App() {
 
   return (
     <Routes>
       <Route path='/login' element={<Login />} />
-      <Route path='/list' element={
-        <ProtectedRoute>
-          <List /> 
-        </ProtectedRoute>
-      } />
-      <Route path='/details/:id' element={<Details />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<DataProvider />}>
+          <Route path='/list' element={<List />} />
+          <Route path='/analytics' element={<Analytics />} />
+          <Route path='/details/:id' element={<Details />} />
+        </Route>
+      </Route>
     </Routes>
   )
 }
