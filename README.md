@@ -170,9 +170,9 @@ An intentional bug has been added to simulate a **browser hardware resource leak
 
 ## Location
 
-```
-src/pages/details.jsx
-```
+
+[src/pages/Details.jsx](src/pages/Details.jsx)    (Commented Part)
+
 
 ## Description
 
