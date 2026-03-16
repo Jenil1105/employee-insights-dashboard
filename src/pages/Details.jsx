@@ -49,12 +49,16 @@ function Details(){
 
         const imageData = canvas.toDataURL("image/png");
 
-        if (streamRef.current) {
-            streamRef.current.getTracks().forEach(track => track.stop());
-            streamRef.current = null;
-        }
+        // INTENTIONAL BUG:
+        // MediaStream cleanup removed to simulate a camera resource leak.
+        // Normally we should stop all tracks using track.stop().
 
-        video.srcObject = null;
+        // if (streamRef.current) {
+        //     streamRef.current.getTracks().forEach(track => track.stop());
+        //     streamRef.current = null;
+        // }
+
+        // video.srcObject = null;
 
         setPhoto(imageData);
     };
