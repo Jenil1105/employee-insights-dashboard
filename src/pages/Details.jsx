@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect,useState,useRef, use } from "react";
+import { useEffect,useState,useRef } from "react";
 
 function Details(){
 
@@ -11,6 +11,7 @@ function Details(){
 
     const [photo, setPhoto] = useState(null);
     const [drawing, setDrawing] = useState(false);
+    const [mergedImage, setMergedImage] = useState(null);
 
     useEffect(() => {
         const startCamera = async () => {
@@ -86,6 +87,41 @@ function Details(){
         setDrawing(false);
     }
 
+    const mergeImages = () => {
+
+        const photoImg = new Image();
+        photoImg.src = photo;
+
+        photoImg.onload = () => {
+
+            const signatureCanvas = signCanvasRef.current;
+
+            const mergeCanvas = document.createElement("canvas");
+            const ctx = mergeCanvas.getContext("2d");
+
+            mergeCanvas.width = photoImg.width;
+            mergeCanvas.height = photoImg.height;
+
+            ctx.drawImage(photoImg, 0, 0);
+
+            ctx.drawImage(
+                signatureCanvas,
+                0,
+                0,
+                signatureCanvas.width,
+                signatureCanvas.height,
+                0,
+                0,
+                photoImg.width,
+                photoImg.height
+            );
+
+            const finalImage = mergeCanvas.toDataURL("image/png");
+
+            setMergedImage(finalImage);
+        };
+    };
+
 
     return(
         <div>
@@ -99,7 +135,7 @@ function Details(){
                 
             </>
         )}
-        {photo && (
+        {!mergedImage && photo && (
             <div style={{position:"relative",width:"400px"}}>
                 <img src={photo} width="400px" />
                 <canvas 
@@ -117,12 +153,19 @@ function Details(){
                     onMouseUp={stopDrawing}
                 />
                 <button onClick={() => {setPhoto(null)}}>Retake</button>
+                <button onClick={mergeImages}> Generate Audit Image</button>
             </div>
             
         )}
         
 
         <canvas ref={canvasRef} style={{display:"none"}} />
+        {mergedImage && (
+            <>
+                <h3>Final Audit Image</h3>
+                <img src={mergedImage} width="400" />
+            </>
+        )}
 
         </div>
     )
