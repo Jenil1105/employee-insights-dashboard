@@ -1,14 +1,16 @@
 import { useParams } from "react-router-dom";
 import { useEffect,useState,useRef } from "react";
+import Navbar from "../components/NavBar";
+import { useData } from "../context/dataContext";
 
 function Details(){
 
-  const {id} = useParams();
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const signCanvasRef = useRef(null);
-  const streamRef = useRef(null);
-
+    const {id} = useParams();
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const signCanvasRef = useRef(null);
+    const streamRef = useRef(null);
+    const { data } = useData()
     const [photo, setPhoto] = useState(null);
     const [drawing, setDrawing] = useState(false);
     const [mergedImage, setMergedImage] = useState(null);
@@ -124,48 +126,69 @@ function Details(){
 
 
     return(
-        <div>
-        <h2>Employee Details</h2>
-        <p>ID: {id}</p>
-        {!photo && (
-            <>
-                <video ref={videoRef} autoPlay playsInline style={{width:"400px"}} />
-                <br/>
-                <button onClick={capturePhoto}>Capture</button>
-                
-            </>
-        )}
-        {!mergedImage && photo && (
-            <div style={{position:"relative",width:"400px"}}>
-                <img src={photo} width="400px" />
-                <canvas 
-                    ref={signCanvasRef}
-                    width="400"
-                    height="300"
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0
-                    }} 
-                    onMouseDown={startDrawing}
-                    onMouseMove={draw}
-                    onMouseLeave={stopDrawing}
-                    onMouseUp={stopDrawing}
-                />
-                <button onClick={() => {setPhoto(null)}}>Retake</button>
-                <button onClick={mergeImages}> Generate Audit Image</button>
-            </div>
-            
-        )}
-        
+        <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <div className="p-6 max-w-4xl mx-auto">
 
-        <canvas ref={canvasRef} style={{display:"none"}} />
-        {mergedImage && (
-            <>
-                <h3>Final Audit Image</h3>
-                <img src={mergedImage} width="400" />
-            </>
-        )}
+                <h2 className="text-2xl font-semibold text-gray-800 mb-2">Employee Details</h2>
+                <p className="text-gray-500 ">Name: {data[id][0]}</p>
+                <p className="text-gray-500 mb-6">ID: {data[id][3]}</p>
+                {!photo && (
+                    <div className="bg-white rounded-xl shadow border border-gray-200 p-6 flex flex-col items-center gap-4">
+                        <video ref={videoRef} autoPlay playsInline className="w-[400px] rounded-lg border" />
+                        <br/>
+                        <button 
+                            onClick={capturePhoto}
+                            className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg font-medium transition"
+                        >Capture</button>
+                        
+                    </div>
+                )}
+                {!mergedImage && photo && (
+
+                    <div className="bg-white rounded-xl shadow border border-gray-200 p-6 flex flex-col items-center gap-4">
+                    
+                        <div className="relative w-[400px]">
+                            <img src={photo} className="w-[400px] rounded-lg" />
+                            <canvas 
+                                ref={signCanvasRef}
+                                width="400"
+                                height="300"
+                                className="absolute top-0 left-0 cursor-crosshair"
+                                onMouseDown={startDrawing}
+                                onMouseMove={draw}
+                                onMouseLeave={stopDrawing}
+                                onMouseUp={stopDrawing}
+                            />
+                            <div className="flex gap-4 pt-5">
+
+                                <button 
+                                    onClick={() => {setPhoto(null)}} 
+                                    className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100">
+                                        Retake
+                                </button>
+                                <button 
+                                    onClick={mergeImages}
+                                    className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium">
+                                        Generate Audit Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                )}
+            
+
+                <canvas ref={canvasRef} style={{display:"none"}} />
+                {mergedImage && (
+                    
+                    <div className="bg-white rounded-xl shadow border border-gray-200 p-6 mt-6 flex flex-col items-center gap-4">
+                        <h3 className="text-lg font-semibold text-gray-800">Final Audit Image</h3>
+                        <img src={mergedImage} className="w-[400px] rounded-lg border"/>
+                    </div>
+                )}
+                
+            </div>
 
         </div>
     )

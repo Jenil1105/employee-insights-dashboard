@@ -13,26 +13,31 @@ const cityCoordinates = {
 function CityMap({ mapCities }) {
 
   return (
-    <MapContainer
-      center={[20,0]}
-      zoom={2}
-      style={{ height: "400px", width: "100%" }}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+    <div className="w-full h-[400px] rounded-xl overflow-hidden">
 
-      {mapCities.map(city => {
-        const coords = cityCoordinates[city]
+        <MapContainer
+            center={[20,0]}
+            zoom={2}
+            className="h-full w-full"
+        >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
 
-        if (!coords) return null
+        {mapCities.map(city => {
+            const coords = cityCoordinates[city]
+            
+            if (!coords) return null
+            
+            return (
+                <Marker key={city} position={coords}>
+                <Popup>
+                    <div className="text-sm font-medium">{city}</div>
+                </Popup>
+            </Marker>
+            )
+        })}
 
-        return (
-          <Marker key={city} position={coords}>
-            <Popup>{city}</Popup>
-          </Marker>
-        )
-      })}
-
-    </MapContainer>
+        </MapContainer>
+    </div>
   )
 }
 

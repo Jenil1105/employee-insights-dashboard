@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../context/dataContext";
+import Navbar from "../components/NavBar";
+import Row from "../components/Row";
 
 function List(){
     
     const rowHeight = 50;
-    const containerHeight = 800;
+    const containerHeight = 550;
     const buffer = 5;
     const navigate = useNavigate();
 
@@ -31,41 +33,43 @@ function List(){
 
 
     return (
-        <div>
-            <h2>Employee list</h2>
+        <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <div className="p-6">
 
-            <div 
-                style={{
-                    height: containerHeight,
-                    overflowY: "auto",
-                    border: "1px solid black"
-                }}
-                onScroll={handleScroll}
-            >
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Employee list</h2>
+                <div className="bg-white rounded-xl shadow border border-gray-200">
 
-                <div style={{height: totalHeight, position:"relative"}}>
-
-                    <div style={{transform: `translateY(${offsetY}px)`}}>
-
-                        {visibleData.map((row, i)=>(
-                            <div onClick={()=>handleClick(i)} key={i} style={{height:rowHeight, display:"flex", borderBottom:"1px solid gray"}}>
-                                <div style={{width:"200px"}}>{row[0]}</div>
-                                <div style={{width:"200px"}}>{row[1]}</div>
-                                <div style={{width:"200px"}}>{row[2]}</div>
-                                <div style={{width:"200px"}}>{row[3]}</div>
-                                <div style={{width:"200px"}}>{row[4]}</div>
-                                <div style={{width:"200px"}}>{row[5]}</div>
-                            </div>
-                        ))}
-
+                    <div className="flex bg-gray-100 text-gray-700 font-semibold border-b border-gray-200">
+                        <div className="w-[300px] p-3">Name</div>
+                        <div className="w-[300px] p-3">Position</div>
+                        <div className="w-[200px] p-3">Location</div>
+                        <div className="w-[200px] p-3">ID</div>
+                        <div className="w-[200px] p-3">Start Date</div>
+                        <div className="w-[200px] p-3">Salary</div>
                     </div>
 
+                    <div className="overflow-y-auto" style={{height: containerHeight}} onScroll={handleScroll}>
+
+                        <div style={{height: totalHeight, position:"relative"}}>
+
+                            <div style={{transform: `translateY(${offsetY}px)`}}>
+
+                                {visibleData.map((row, i)=>(
+                                    <div 
+                                        onClick={()=>handleClick(i)} 
+                                        key={i} 
+                                        className="flex border-b border-gray-200 hover:bg-orange-50 cursor-pointer transition"
+                                        style={{height:rowHeight}}>
+                                        <Row row={row}/>
+                                    </div>
+                                ))}
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-
-            
-            
         </div>
     );
 
