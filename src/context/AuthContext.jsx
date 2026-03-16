@@ -10,8 +10,13 @@ export const AuthProvider = ({ children }) => {
         setIsAuth(true);
     };
 
+    const logout = ()=>{
+        localStorage.removeItem("auth");
+        setIsAuth(false);
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuth, login }}>
+        <AuthContext.Provider value={{ isAuth, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
